@@ -1,0 +1,30 @@
+{
+  "name": "img-board-backend",
+  "version": "0.1.0",
+  "description": "Backend for \"img-board\" project (basically me learning js + node)",
+  "main": "index.js",
+  "engines": {
+    "node": ">=12.18.0",
+    "npm": ">=6.14.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntonyMoes/img-board-backend.git"
+  },
+  "author": "AntonyMo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AntonyMoes/img-board-backend/issues"
+  },
+  "homepage": "https://github.com/AntonyMoes/img-board-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.4.0"
+  }
+}
