@@ -1,0 +1,499 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.1.0",
+    "title": "img-board-api"
+  },
+  "host": "api.img-board.antonymo.com",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Authorization",
+      "description": "and authentication"
+    },
+    {
+      "name": "Boards"
+    },
+    {
+      "name": "Posts"
+    }
+  ],
+  "schemes": [
+    "https"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "sessionCookie": {
+      "type": "apiKey",
+      "name": "sid",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": [
+          "Authorization"
+        ],
+        "summary": "Register a new user",
+        "operationId": "register",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AuthUser"
+            },
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Registered user",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Malformed request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "409": {
+            "description": "Specified user already exists"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": [
+          "Authorization"
+        ],
+        "summary": "Login",
+        "operationId": "login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AuthUser"
+            },
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged in user",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Malformed request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Specified user-password pair not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Authorization"
+        ],
+        "summary": "Logout",
+        "operationId": "logout",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          }
+        }
+      }
+    },
+    "/brd": {
+      "get": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Get list of boards",
+        "operationId": "get_boards",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Board info and posts",
+            "schema": {
+              "$ref": "#/definitions/Boards"
+            }
+          }
+        }
+      }
+    },
+    "/brd/{url_name}": {
+      "get": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Get specified board and posts",
+        "operationId": "get_board",
+        "parameters": [
+          {
+            "name": "url_name",
+            "in": "path",
+            "description": "Board short name",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Board info and posts",
+            "schema": {
+              "$ref": "#/definitions/BoardPosts"
+            }
+          },
+          "404": {
+            "description": "Specified board not found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Boards"
+        ],
+        "summary": "Create new board",
+        "operationId": "create_board",
+        "parameters": [
+          {
+            "name": "url_name",
+            "in": "path",
+            "description": "Board short name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/BoardInfo"
+            },
+            "required": true
+          }
+        ],
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Board info",
+            "schema": {
+              "$ref": "#/definitions/Board"
+            }
+          },
+          "400": {
+            "description": "Malformed request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Anauthorized"
+          },
+          "403": {
+            "description": "You're not an administrator"
+          },
+          "409": {
+            "description": "Specified board already exists"
+          }
+        }
+      }
+    },
+    "/brd/{url_name}/post": {
+      "post": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get specified board and posts",
+        "operationId": "create_topic",
+        "parameters": [
+          {
+            "name": "url_name",
+            "in": "path",
+            "description": "Board short name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PostInfo"
+            },
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New post",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "400": {
+            "description": "Malformed request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Specified board not found"
+          }
+        }
+      }
+    },
+    "/brd/{url_name}/{post_number}": {
+      "get": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Get specified post and thread",
+        "description": "Gets a thread specified post belongs to",
+        "operationId": "get_post",
+        "parameters": [
+          {
+            "name": "url_name",
+            "in": "path",
+            "description": "Board short name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "post_number",
+            "in": "path",
+            "description": "Number of specified post",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Specified thread",
+            "schema": {
+              "$ref": "#/definitions/Thread"
+            }
+          },
+          "404": {
+            "description": "Specified board or post not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Reply to thread",
+        "description": "Posts reply in a thread specified post belongs to",
+        "operationId": "create_post",
+        "parameters": [
+          {
+            "name": "url_name",
+            "in": "path",
+            "description": "Board short name",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "post_number",
+            "in": "path",
+            "description": "Number of post to reply to",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PostInfo"
+            },
+            "required": true
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "New post",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "400": {
+            "description": "Malformed request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Specified board not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "Which parameter caused an error"
+        },
+        "info": {
+          "type": "string",
+          "description": "Error description"
+        }
+      }
+    },
+    "AuthUser": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "type": "string"
+        }
+      }
+    },
+    "BoardInfo": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "Board": {
+      "type": "object",
+      "properties": {
+        "url_name": {
+          "type": "string",
+          "description": "short name displayed in url"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "PostInfo": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "Post": {
+      "type": "object",
+      "properties": {
+        "board": {
+          "type": "string",
+          "description": "board url_name"
+        },
+        "post_number": {
+          "type": "number"
+        },
+        "content": {
+          "type": "string"
+        }
+      }
+    },
+    "BoardPosts": {
+      "type": "object",
+      "properties": {
+        "board": {
+          "$ref": "#/definitions/Board"
+        },
+        "posts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Post"
+          }
+        }
+      }
+    },
+    "Thread": {
+      "type": "object",
+      "properties": {
+        "topic": {
+          "$ref": "#/definitions/Post"
+        },
+        "posts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Post"
+          }
+        }
+      }
+    },
+    "Boards": {
+      "type": "object",
+      "properties": {
+        "boards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Board"
+          }
+        }
+      }
+    }
+  }
+}
