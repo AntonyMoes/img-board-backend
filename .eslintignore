@@ -1,2 +1,2 @@
-test/*.js
+tests/*.js
 jest.config.js
