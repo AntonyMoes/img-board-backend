@@ -1,11 +1,33 @@
 'use strict';
 
-const utils = require('../lib/utils');
+const { promisify } = require('../lib/utils');
 
-test('adds 1 + 2 to equal 3', () => {
-  expect(utils.sum(1, 2)).toBe(3);
-});
+describe('promisify testing', () => {
+  test('should return function', () => {
+    const fn = () => {};
+    expect(promisify(fn)).toBeInstanceOf(Function);
+  });
 
-test('subs 3 - 2 to equal 1', () => {
-  expect(utils.sub(3, 2)).toBe(1);
+  test('returned function should return promise', () => {
+    const fn = () => {};
+    expect(promisify(fn)()).toBeInstanceOf(Promise);
+  });
+
+  test('promises should correctly resolve', () => {
+    const fn = (cb) => {
+      cb(null, { data: 'data' });
+    };
+    const promise = promisify(fn)();
+
+    return expect(promise).resolves.toStrictEqual({ data: 'data' });
+  });
+
+  test('promises should correctly reject', () => {
+    const fn = (cb) => {
+      cb(new Error(''), null);
+    };
+    const promise = promisify(fn)();
+
+    return expect(promise).rejects.toStrictEqual(new Error(''));
+  });
 });
