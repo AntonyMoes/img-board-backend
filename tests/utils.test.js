@@ -30,4 +30,18 @@ describe('promisify testing', () => {
 
     return expect(promise).rejects.toStrictEqual(new Error(''));
   });
+
+  test('promises should call functions only once', () => {
+    const fn = (cb) => {
+      cb(null, { data: 'data' });
+    };
+    const promise = promisify(fn)();
+    const onResolve = jest.fn(data => data);
+
+    return promise
+      .then(onResolve)
+      .then(() => {
+        expect(onResolve.mock.calls.length).toBe(1);
+      });
+  });
 });

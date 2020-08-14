@@ -1,6 +1,10 @@
 # IDE
 .idea/
 
+# DB
+data/*
+!data/empty
+
 # Logs
 logs
 *.log

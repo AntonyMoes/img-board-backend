@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/AntonyMoes/img-board-backend#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "sqlite3": "^5.0.0"
   },
   "devDependencies": {
     "eslint": "^7.4.0",
